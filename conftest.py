@@ -1,15 +1,10 @@
-import os
-
 import pytest
+
 from selenium import webdriver
-
-from pages.login_page import LoginPage
-
-from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from selenium import webdriver
+from pages.login_page import LoginPage
 
 
 @pytest.fixture
@@ -17,6 +12,12 @@ def driver():
     options = webdriver.ChromeOptions()
 
     options.add_argument("--disable-notifications")
+
+    # Required for GitHub Actions / Linux CI
+    options.add_argument("--headless")
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--window-size=1920,1080")
 
     options.add_experimental_option(
         "prefs",
@@ -51,30 +52,3 @@ def logged_in_driver(driver):
     )
 
     return driver
-
-
-@pytest.hookimpl(hookwrapper=True)
-def pytest_runtest_makereport(item, call):
-
-    outcome = yield
-    report = outcome.get_result()
-
-    if report.when == "call" and report.failed:
-
-        driver = item.funcargs.get("driver")
-
-        if driver is None:
-            driver = item.funcargs.get("logged_in_driver")
-
-        if driver:
-
-            os.makedirs("screenshots", exist_ok=True)
-
-            screenshot_path = os.path.join(
-                "screenshots",
-                f"{item.name}.png"
-            )
-
-            driver.save_screenshot(screenshot_path)
-
-            
