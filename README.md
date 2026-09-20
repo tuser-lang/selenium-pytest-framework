@@ -1,27 +1,34 @@
 # Selenium Pytest Automation Framework
 
-A UI test automation framework built using **Python, Selenium WebDriver, and Pytest**.
+![GitHub Actions](https://github.com/tuser-lang/selenium-pytest-framework/actions/workflows/tests.yml/badge.svg)
 
-The framework follows the **Page Object Model (POM)** design pattern and includes automated test execution through **GitHub Actions CI**.
+A Selenium WebDriver automation framework built with Python, Pytest, and the Page Object Model (POM).
 
-## Tech Stack
+The project automates the main functionality of the SauceDemo application and runs the test suite locally as well as automatically through GitHub Actions CI.
+
+---
+
+## 🚀 Tech Stack
 
 - Python 3.14
 - Selenium WebDriver
 - Pytest
-- Pytest HTML
+- Pytest HTML Reports
+- Page Object Model (POM)
 - Git & GitHub
 - GitHub Actions
-- Chrome / ChromeDriver
+- Chrome / Headless Chrome
 
-## Project Structure
+---
+
+## 📁 Project Structure
 
 ```text
 selenium-pytest-framework/
 │
 ├── .github/
 │   └── workflows/
-│       └── selenium-tests.yml
+│       └── tests.yml
 │
 ├── pages/
 │   ├── login_page.py
@@ -34,132 +41,133 @@ selenium-pytest-framework/
 │   ├── test_products.py
 │   └── test_checkout.py
 │
-├── screenshots/
-│
 ├── conftest.py
 ├── pytest.ini
 ├── requirements.txt
 └── README.md
 
-Application Under Test
-The framework automates the following website:
-SauceDemo
-https://www.saucedemo.com/
-The tests cover login, product selection, cart functionality, and checkout.
+Automated Tests
+The framework currently contains 7 automated tests.
 
-Test Coverage
 Login Tests
 Invalid username and password
 Missing username
 Missing password
 
+
 Product Tests
 Verify product count
 Add product to cart
-Verify product in cart
+Add product and verify cart
 
-Checkout Test
-Add product to cart
-Navigate to checkout
-Enter customer information
-Continue checkout
-Complete order
-Verify order confirmation
-
-Page Object Model
-The project uses the Page Object Model (POM) pattern.
-Each application page has its own Python class containing:
-Locators
-Page actions
-Synchronization/waits
-
+Framework Design
+The project follows the Page Object Model design pattern.
+Page-specific Selenium operations are separated from test cases.
 For example:
-LoginPage
-InventoryPage
-CartPage
+Test
+ ↓
 CheckoutPage
+ ↓
+Selenium WebDriver
+ ↓
+SauceDemo
 
-This keeps test cases clean and makes the framework easier to maintain.
+This makes the tests easier to maintain and reuse.
 
-Running Tests Locally
-1. Clone the repository
-git clone <YOUR_GITHUB_REPOSITORY_URL>
+Installation
+Clone the repository:
+git clone https://github.com/tuser-lang/selenium-pytest-framework.git
+
+Navigate to the project:
 cd selenium-pytest-framework
 
-2. Create a virtual environment
+Create a virtual environment:
 python -m venv venv
 
-3. Activate the virtual environment
-
-Windows:
+Activate it on Windows:
 venv\Scripts\activate
 
-4. Install dependencies
+Install dependencies:
 pip install -r requirements.txt
 
-5. Run all tests
+Run Tests
+Run the complete test suite:
 pytest -v
 
-6. Run a specific test
+Run a specific test:
 pytest -v tests/test_checkout.py::test_complete_checkout
 
-7. Run tests by marker
-Run regression tests:
+Run tests by marker:
+pytest -v -m smoke
+or:
 pytest -v -m regression
 
-HTML Test Report
+Test Reports
 The project uses pytest-html to generate an HTML test report.
+
 Run:
 pytest -v --html=reports/report.html
-The report will be generated under:
-reports/report.html
+The generated report can be opened in a browser.
 
-Screenshots
-Screenshots are automatically captured when a test fails.
-Screenshots are stored in:
+Failure Screenshots
+The framework automatically captures a screenshot when a test fails.
+Screenshots are saved under:
 screenshots/
+This helps with debugging Selenium failures.
 
 Continuous Integration
-The project uses GitHub Actions for continuous integration.
-The workflow:
+GitHub Actions runs the automated tests on:
+Push to main
+Pull requests targeting main
+Manual workflow execution
 
 The workflow:
 
-Checks out the repository
-Sets up Python
-Installs project dependencies
-Starts Chrome in headless mode
-Executes the Pytest test suite
+Checkout code
+      ↓
+Set up Python
+      ↓
+Install dependencies
+      ↓
+Run Pytest
+      ↓
+Pass / Fail
 
-The workflow runs automatically when code is pushed to the main branch or when a pull request targets main.
+The workflow file is:
 
-CI Configuration
-Chrome is configured for headless execution in conftest.py:
-options.add_argument("--headless")
-options.add_argument("--no-sandbox")
-options.add_argument("--disable-dev-shm-usage")
-options.add_argument("--window-size=1920,1080")
+.github/workflows/tests.yml
 
-This allows Selenium tests to run in the GitHub Actions Ubuntu environment without opening a visible browser.
+Manual Execution
 
-Test Results
-Current test suite:
+The workflow also supports:
 
-7 tests
-7 passed
+GitHub → Actions → Selenium Pytest Tests → Run workflow
 
-Author
-Amal
+This allows the test suite to be executed without making a new code change.
 
-This project demonstrates practical experience with:
 
-Selenium WebDriver
+Purpose
+This project demonstrates practical skills in:
+Selenium WebDriver automation
 Python
 Pytest
 Page Object Model
 Test fixtures
-Parameterized testing
+Test parametrization
 Test markers
+Explicit waits
+Failure screenshots
 HTML reporting
 Git/GitHub
-GitHub Actions CI
+CI/CD with GitHub Actions
+Headless browser execution
+
+Author
+Tuser
+
+QA Automation / Selenium / Python
+When the workflow is passing, GitHub will display a green badge. If a future commit breaks the tests, it will change to a failing status.
+
+So someone visiting your repository can immediately see:
+Selenium Pytest Tests — passing ✅
+

@@ -4,9 +4,11 @@ on:
   push:
     branches:
       - main
+
   pull_request:
     branches:
       - main
+
   workflow_dispatch:
 
 jobs:
@@ -28,4 +30,11 @@ jobs:
           pip install -r requirements.txt
 
       - name: Run pytest
-        run: pytest -v
+        run: pytest -v --html=reports/report.html --self-contained-html
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: pytest-html-report
+          path: reports/report.html
