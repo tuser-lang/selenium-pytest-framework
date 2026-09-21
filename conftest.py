@@ -5,6 +5,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from pages.login_page import LoginPage
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 @pytest.fixture
@@ -38,14 +42,14 @@ def driver():
 @pytest.fixture
 def logged_in_driver(driver):
 
-    driver.get("https://www.saucedemo.com/")
+    driver.get(os.getenv("BASE_URL"))
 
     login_page = LoginPage(driver)
 
     login_page.login(
-        "standard_user",
-        "secret_sauce"
-    )
+    os.getenv("TEST_USERNAME"),
+    os.getenv("TEST_PASSWORD")
+)
 
     WebDriverWait(driver, 10).until(
         EC.url_contains("inventory.html")
